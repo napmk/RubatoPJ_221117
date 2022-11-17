@@ -1,10 +1,20 @@
 package com.rubato.homepage.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.rubato.homepage.dao.IDao;
+
 @Controller
 public class HomeComtroller {
+	
+	@Autowired
+	private SqlSession sqlSession;
+	
 	@RequestMapping (value = "index")
 	public String index() {
 		
@@ -27,6 +37,26 @@ public class HomeComtroller {
 	public String board_view() {
 		
 		return "board_view";
+	}
+	
+	@RequestMapping (value = "member_join")
+	public String member_join() {
+		
+		return "member_join";
+	}
+	
+	@RequestMapping (value = "joinOk")
+	public String joinOk(HttpServletRequest request) {
+		
+		String mid = request.getParameter("mid");
+		String mpw = request.getParameter("mpw");
+		String mname = request.getParameter("mname");
+		String memail = request.getParameter("memail");
+		
+		IDao dao = sqlSession.getMapper(IDao.class);
+		dao.joinMember(mid, mpw, mname, memail);
+		
+		return "redirect:index";
 	}
 	
 	

@@ -62,7 +62,7 @@
         </aside>
         <main>
             <section id="main">
-                <img src="image/main_img.png">
+                <img src="${pageContext.request.contextPath}/resources/image/main_img.png">
                 <section id="notice_free_youtube"><!--공지사항/자유게시판/유튜브시작-->
                     <article id="notice"><!--공지사항-->
                         <div class="latest_title">
