@@ -1,0 +1,6 @@
+footer{height: 100px; border-top: 1px solid #bbb; margin-top: 30px}
+footer #footer_logo{float: left;margin: 7px 0 0 200px}
+footer #address{float: left;margin: 20px 0 0 50px}
+footer #footer_sns {float: right}
+footer #footer_sns li{ display: inline-block;margin-top: 20px}
+footer #copyright{font-size: 11px; color: #999}

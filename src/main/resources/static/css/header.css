@@ -1,0 +1,10 @@
+header{height: 100px;position: relative}
+header #logo{position: absolute; top:20px; left: 20px}
+header #top_menu{position: absolute ;right: 0; top: 10px}
+header #top_menu li {float: left;padding-left: 10px}
+header #main_menu{position: absolute ;left: 210px; top: 40px; background-image: url("../image/main_menu_bg.png"); width: 757px; height: 38px}
+header #main_menu li{display: inline-block;font-size: 12px; margin: 11px 44px 0 50px; color: #fff}
+header #main_menu li:last-child{margin:11px 0 0 30px}
+header #main_menu a:link{color: #fff; text-decoration: none}
+header #main_menu a:visited{color: #fff;}
+header #main_menu a:hover{font-weight: bold; color: burlywood}
