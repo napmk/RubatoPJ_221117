@@ -90,5 +90,19 @@ public class HomeComtroller {
 		
 		return "redirect:index";
 	}
+	
+	@RequestMapping(value = "writeOk")
+	public String writeOk(HttpServletRequest request) {
+		
+		String rfbname = request.getParameter("rfbname");
+		String rfbtitle = request.getParameter("rfbtitle");
+		String rfbcontent = request.getParameter("rfbcontent");
+		String rfbuserid = request.getParameter("rfbuserid");
+		
+		IDao dao =sqlSession.getMapper(IDao.class);
+		dao.rfbWrite(rfbname, rfbtitle, rfbcontent, rfbuserid);
+		
+		return "redirect:list";
+	}
 
 }
