@@ -37,7 +37,7 @@
                     <li><a href="logout">LOGOUT </a>|</li>
                     <% } %>
                     <% if(sessionId == null) { %>
-                    <li>JOIN |</li>
+                    <li><a href="member_join">JOIN |</a></li>
                     <% } else { %>
                     <li>MY INFO |</li>
                     <% } %>
@@ -70,7 +70,7 @@
                 </form>
                    <div class="clear"></div>
 	               <div id="join_search">
-	                    <img src="${pageContext.request.contextPath}/resources/image/btn_join.gif">
+	                    <a href="member_join"><img src="${pageContext.request.contextPath}/resources/image/btn_join.gif"></a>
 	                    <img src="${pageContext.request.contextPath}/resources/image/btn_search.gif">
 	               </div>
                 <% } else { %>

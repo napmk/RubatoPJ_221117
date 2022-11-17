@@ -48,15 +48,18 @@ public class HomeComtroller {
 	}
 	
 	@RequestMapping (value = "joinOk")
-	public String joinOk(HttpServletRequest request) {
+	public String joinOk(HttpServletRequest request ,HttpSession session) {
 		
-		String mid = request.getParameter("mid");
-		String mpw = request.getParameter("mpw");
-		String mname = request.getParameter("mname");
-		String memail = request.getParameter("memail");
+		String memberId = request.getParameter("mid");
+		String memberPw = request.getParameter("mpw");
+		String memberName = request.getParameter("mname");
+		String memberEmail = request.getParameter("memail");
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
-		dao.joinMember(mid, mpw, mname, memail);
+		dao.joinMember(memberId, memberPw, memberName, memberEmail);
+		
+		session.setAttribute("memberId", memberId);// 회원가입후 자동 로그인 기능
+		
 		
 		return "redirect:index";
 	}
