@@ -1,10 +1,12 @@
 package com.rubato.homepage.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.rubato.homepage.dao.IDao;
@@ -59,6 +61,31 @@ public class HomeComtroller {
 		return "redirect:index";
 	}
 	
+	@RequestMapping (value = "loginOk")
+	public String loginOk(HttpServletRequest request, HttpSession session) {
+		
+		String memberId = request.getParameter("mid");
+		String memberPw = request.getParameter("mpw");
+		
+
+		IDao dao = sqlSession.getMapper(IDao.class);
+		//int checkIdFlag = dao.checkUserId(mid); 
+		//select문이니까 고민이 필요함 그래서 int checkIdFlag 로 가져옴.
+		int checkIdFlag = dao.checkUserIdAndPw(memberId, memberPw);  // 1이면 로그인 OK , 0이면 로그인x
+		
+		if (checkIdFlag == 1) {
+			session.setAttribute("memberId", memberId);
+		}
+		
+		return "redirect:index";
+	}
 	
+	@RequestMapping(value = "logout")
+	public String logout(HttpSession session) {
+		
+		session.invalidate();
+		
+		return "redirect:index";
+	}
 
 }

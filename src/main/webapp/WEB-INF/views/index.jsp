@@ -11,14 +11,36 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/main.css" >
 </head>
 <body>
+	<% 
+		String sessionId = (String)session.getAttribute("memberId");
+		//로그인 중이라면 로그인한 아이디가 저장되고 비로그인 중이라면 sessionId == null 임
+		//System.out.println(sessionId);
+	
+		//if(sessionId == null){
+		//	System.out.println("로그인안됨");
+		//}else{
+		//	System.out.println("로그인 한 아이디:" + sessionId);
+		//}
+		//System.out.println(sessionId);
+	
+	%>
+
     <div id="wrap">
         <header> <!--header 시작-->
             <a href="index"><img id="logo" src="${pageContext.request.contextPath}/resources/image/logo.png" alt="logo"></a>
             <nav id="top_menu">
                 <ul>
                     <li>HOME |</li>
+                    <% if(sessionId == null) { %>
                     <li>LOGIN |</li>
+                    <% } else { %>
+                    <li><a href="logout">LOGOUT </a>|</li>
+                    <% } %>
+                    <% if(sessionId == null) { %>
                     <li>JOIN |</li>
+                    <% } else { %>
+                    <li>MY INFO |</li>
+                    <% } %>
                     <li>NOTICE</li>
                 </ul>
              </nav>
@@ -35,18 +57,35 @@
         <aside>
             <article id="login_box"><!--login 시작-->
                 <img id="login_title" src="${pageContext.request.contextPath}/resources/image/ttl_login.png">
+                
+                <% if(sessionId == null) { %>
+                <form action="loginOk">
+	                <div id="input_button">
+	                    <ul id="login_input">
+	                        <li><input type="text" name="mid"></li>
+	                        <li><input type="password" name="mpw"></li>
+	                    </ul>
+	                    <input type="image" id="login_btn" src="${pageContext.request.contextPath}/resources/image/btn_login.gif">
+	                </div>
+                </form>
+                   <div class="clear"></div>
+	               <div id="join_search">
+	                    <img src="${pageContext.request.contextPath}/resources/image/btn_join.gif">
+	                    <img src="${pageContext.request.contextPath}/resources/image/btn_search.gif">
+	               </div>
+                <% } else { %>
                 <div id="input_button">
-                    <ul id="login_input">
-                        <li><input type="text"></li>
-                        <li><input type="password"></li>
-                    </ul>
-                    <img id="login_btn" src="${pageContext.request.contextPath}/resources/image/btn_login.gif">
-                </div>
-                <div class="clear"></div>
-                <div id="join_search">
-                    <img src="${pageContext.request.contextPath}/resources/image/btn_join.gif">
-                    <img src="${pageContext.request.contextPath}/resources/image/btn_search.gif">
-                 </div>
+	               <ul id="login_input">
+	                    <%= sessionId %>님 로그인중입니다.
+	               </ul>
+	                <br><br>
+	                <a href="logout" >로그아웃</a>
+	            </div>
+                 <% } %>
+                
+                
+                
+             
             </article><!--login 끝-->
             <article id="guestbook"><!--guestbook 시작-->
                 <div id="guestbook_title">
