@@ -162,6 +162,8 @@ public class HomeComtroller {
 		
 	}
 	
+
+	
 	@RequestMapping (value = "replyOk")
 	public String replyOk(HttpServletRequest request, HttpSession session, Model model, HttpServletResponse response) {
 		
@@ -186,7 +188,7 @@ public class HomeComtroller {
 			
 			IDao dao = sqlSession.getMapper(IDao.class);
 			dao.rrwrite(rrorinum, sessionId, rrcontent); //댓글쓰기
-			
+			dao.rrcount(rrorinum); //해당글 댓글 총 개수 증가
 			
 			RFBoardDto rfboardDto = dao.rfboardView(rrorinum);
 			ArrayList<RReplyDto> replyDtos= dao.rrlist(rrorinum);
@@ -198,5 +200,25 @@ public class HomeComtroller {
 		
 		return "board_view";
 	}
-
+		@RequestMapping (value = "replyDelete")
+		public String replyDelete(HttpServletRequest request, Model model) {
+			
+			
+			String rrnum = request.getParameter("rrnum"); //댓글의 고유 번호
+			String rrorinum = request.getParameter("rfbnum"); //댓글이 달린 원글의 고유 번호
+			
+			IDao dao = sqlSession.getMapper(IDao.class);
+			dao.rrdelete(rrnum); //댓글삭제
+			dao.rrcountMinus(rrorinum); // 해당글 댓글카운트하니씩 삭제
+			
+			RFBoardDto rfboardDto = dao.rfboardView(rrorinum);
+			ArrayList<RReplyDto> replyDtos= dao.rrlist(rrorinum);
+			
+			model.addAttribute("rfbView" , rfboardDto);// 원글의 게시글 내용전부
+			model.addAttribute("replylist" ,replyDtos); // 해당글에 달린 댓글 리스트
+			
+			
+			
+			return "board_view";
+		}
 }
