@@ -201,11 +201,28 @@ public class HomeComtroller {
 		return "board_view";
 	}
 		@RequestMapping (value = "replyDelete")
-		public String replyDelete(HttpServletRequest request, Model model) {
+		public String replyDelete(HttpServletRequest request, Model model,HttpSession session,HttpServletResponse response) {
 			
 			
 			String rrnum = request.getParameter("rrnum"); //댓글의 고유 번호
 			String rrorinum = request.getParameter("rfbnum"); //댓글이 달린 원글의 고유 번호
+			
+			String sessionId = (String)session.getAttribute("memberId"); //현재 로그인한 유저의 아이디
+			
+			if(sessionId == null) {//참이면 로그인이 안된 상태
+				PrintWriter out;
+				try {
+					response.setContentType("text/html;charset=utf-8");
+					out = response.getWriter();
+					out.println("<script>alert('로그인하지 않으면 댓글을 삭제 하실수 없습니다!');history.go(-1);</script>");
+					out.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} else {
+			
 			
 			IDao dao = sqlSession.getMapper(IDao.class);
 			dao.rrdelete(rrnum); //댓글삭제
@@ -217,8 +234,15 @@ public class HomeComtroller {
 			model.addAttribute("rfbView" , rfboardDto);// 원글의 게시글 내용전부
 			model.addAttribute("replylist" ,replyDtos); // 해당글에 달린 댓글 리스트
 			
-			
+			}
 			
 			return "board_view";
+		}
+		
+		@RequestMapping (value = "search_list")
+		public String search_list() {
+			
+			
+			return "board_list";
 		}
 }
