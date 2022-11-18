@@ -128,7 +128,8 @@
                     <tr>
                         <td class="col1">${boardDto.rfbnum }</td>
                         <td class="col2">
-                            <a href="board_view">${boardDto.rfbtitle }</a>
+                            <a href="board_view?rfbnum=${boardDto.rfbnum }">${boardDto.rfbtitle }</a> 
+                            <!-- ?rfbnum=${boardDto.rfbnum } 게시글 링크걸때 추가해줘야함 !! -->
                         </td>
                         <td class="col3">${boardDto.rfbname }</td>
                         <td class="col4">${boardDto.rfbdate }</td>

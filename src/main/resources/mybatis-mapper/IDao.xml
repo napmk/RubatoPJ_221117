@@ -30,6 +30,15 @@
 	
 	 <select id="rfboardAllCount" resultType="int">
    		SELECT COUNT(*) FROM rubafreeboard <!-- 게시물의 갯수를 모두 세어라 -->
-   </select>
+    </select>
+    <select id="rfboardView" resultType="com.rubato.homepage.dto.RFBoardDto">
+    	SELECT * FROM rubafreeboard WHERE rfbnum=#{param1}
+    </select>
+    <delete id="delete">
+    	DELETE FROM rubafreeboard WHERE rfbnum=#{param1}
+    </delete>
+    <update id="rfbhit">
+    	UPDATE rubafreeboard SET rfbhit=rfbhit+1 WHERE rfbnum=#{param1}
+    </update>
 	
 </mapper>

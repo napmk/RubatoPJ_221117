@@ -65,9 +65,19 @@ public class HomeComtroller {
 	}
 	
 	@RequestMapping (value = "board_view")
-	public String board_view() {
+	public String board_view(HttpServletRequest request, Model model) {
+		String rfbnum = request.getParameter("rfbnum");
+		//사용자가 클릭한 글의 번호
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		dao.rfbhit(rfbnum);// 조회수 증가 ★★★순서 중요 
+		
+		RFBoardDto rfboardDto = dao.rfboardView(rfbnum);
+		model.addAttribute("rfbView" , rfboardDto);
 		
 		return "board_view";
+		
+		
 	}
 	
 	@RequestMapping (value = "member_join")
@@ -135,6 +145,18 @@ public class HomeComtroller {
 		dao.rfbWrite(boardName, boardTitle, boardContent, sessionId);
 		
 		return "redirect:board_list";
+	}
+	
+	@RequestMapping (value = "delete")
+	public String delete(HttpServletRequest request) {
+		
+		String rfbnum = request.getParameter("rfbnum");
+		IDao dao = sqlSession.getMapper(IDao.class);
+		dao.delete(rfbnum);
+		
+		
+		return "redirect:board_list";
+		
 	}
 
 }

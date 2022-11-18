@@ -16,4 +16,7 @@ public interface IDao {
 	public void rfbWrite(String rfbname, String rfbtitle, String rfbcontent, String rfbuserid); //게시판 쓰기 insert 
 	public ArrayList<RFBoardDto> rfbList(); // 게시판 리스트 select
 	public int rfboardAllCount(); //총 게시물 갯수 select 
+	public RFBoardDto rfboardView(String rfbnum); //클릭한 글의 게시물의 내용보기 select
+	public void delete(String rfbnum); //글삭제
+	public void rfbhit(String rfbnum);//조회수
 }

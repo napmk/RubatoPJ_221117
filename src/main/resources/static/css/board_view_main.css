@@ -1,6 +1,6 @@
 section#main h2#board_title{border-bottom: 1px solid #bbb; margin-top:20px; padding-bottom:5px}
 section#main #view_title_box{border-top: 2px solid #aaa;background-color:#eee ; padding: 10px ; margin-top: 10px}
-section#main #view_title_box #info{margin-left: 250px}
+section#main #view_title_box #info{float: right;}
 section#main #view_title_box #boardTitle{font-size: 13px; color: #000}
 section#main #view_content{line-height: 150%;padding: 10px }
 section#main #comment_box{height: 115px;background-color:#efefef; border-top: 1px solid #ccc; position: relative}

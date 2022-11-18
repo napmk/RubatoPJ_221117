@@ -97,15 +97,11 @@
                 <img src="${pageContext.request.contextPath}/resources/image/comm.gif">
                 <h2 id="board_title">자유게시판</h2>
                 <div id="view_title_box">
-                    <span id="boardTitle">까스통의 선물인 보드카가 정말 독하네요!!</span>
-                    <span id="info">루바토 | 조회수 :208 | 2022-10-05 (09:21)</span>
+                    <span id="boardTitle">${rfbView.rfbtitle  }</span>
+                    <span id="info">${rfbView.rfbname  } | 조회수 :${rfbView.rfbhit  } | ${rfbView.rfbdate  }</span>
                 </div>
                 <p id="view_content">
-                     안녕하세요 <br>
-                     안녕하세요 <br>
-                     안녕하세요 <br>
-                     안녕하세요 <br>
-                     안녕하세요 <br>
+                     ${rfbView.rfbcontent  }<br>
                 </p>
                 <div id="comment_box">
                     <img id="title_comment" src="${pageContext.request.contextPath}/resources/image/title_comment.gif">
@@ -113,7 +109,7 @@
                     <img id="ok_ripple" src="${pageContext.request.contextPath}/resources/image/ok_ripple.gif">
                 </div>
                 <div id="buttons">
-                    <a href="#"><img src="${pageContext.request.contextPath}/resources/image/delete.png"></a>
+                    <a href="delete?rfbnum=${rfbView.rfbnum} "><img src="${pageContext.request.contextPath}/resources/image/delete.png"></a>
                     <a href="board_list"><img src="${pageContext.request.contextPath}/resources/image/list.png"></a>
                     <a href="board_write"><img src="${pageContext.request.contextPath}/resources/image/write.png"></a>
                 </div>
