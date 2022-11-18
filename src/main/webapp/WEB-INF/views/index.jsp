@@ -82,11 +82,7 @@
 	                <a href="logout" >로그아웃</a>
 	            </div>
                  <% } %>
-                
-                
-                
-             
-            </article><!--login 끝-->
+             </article><!--login 끝-->
             <article id="guestbook"><!--guestbook 시작-->
                 <div id="guestbook_title">
                     <img src="${pageContext.request.contextPath}/resources/image/ttl_memo.gif">

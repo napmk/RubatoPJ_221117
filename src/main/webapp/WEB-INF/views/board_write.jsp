@@ -13,14 +13,26 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/board_write_main.css" >
 </head>
 <body>
+	<% 
+		String sessionId = (String)session.getAttribute("memberId");
+
+	%>
     <div id="wrap">
         <header> <!--header 시작-->
             <a href="index"><img id="logo" src="${pageContext.request.contextPath}/resources/image/logo.png" alt="logo"></a>
-            <nav id="top_menu">
+             <nav id="top_menu">
                 <ul>
                     <li>HOME |</li>
+                    <% if(sessionId == null) { %>
                     <li>LOGIN |</li>
-                    <li>JOIN |</li>
+                    <% } else { %>
+                    <li><a href="logout">LOGOUT </a>|</li>
+                    <% } %>
+                    <% if(sessionId == null) { %>
+                    <li><a href="member_join">JOIN |</a></li>
+                    <% } else { %>
+                    <li>MY INFO |</li>
+                    <% } %>
                     <li>NOTICE</li>
                 </ul>
              </nav>
@@ -37,6 +49,8 @@
         <aside>
             <article id="login_box"><!--login 시작-->
                 <img id="login_title" src="${pageContext.request.contextPath}/resources/image/ttl_login.png">
+                
+                <% if(sessionId == null) { %>
                 <form action="loginOk">
 	                <div id="input_button">
 	                    <ul id="login_input">
@@ -46,12 +60,21 @@
 	                    <input type="image" id="login_btn" src="${pageContext.request.contextPath}/resources/image/btn_login.gif">
 	                </div>
                 </form>
-                <div class="clear"></div>
-                <div id="join_search">
-                    <img src="${pageContext.request.contextPath}/resources/image/btn_join.gif">
-                    <img src="${pageContext.request.contextPath}/resources/image/btn_search.gif">
-                 </div>
-            </article><!--login 끝-->
+                   <div class="clear"></div>
+	               <div id="join_search">
+	                    <a href="member_join"><img src="${pageContext.request.contextPath}/resources/image/btn_join.gif"></a>
+	                    <img src="${pageContext.request.contextPath}/resources/image/btn_search.gif">
+	               </div>
+                <% } else { %>
+                <div id="input_button">
+	               <ul id="login_input">
+	                    <%= sessionId %>님 로그인중입니다.
+	               </ul>
+	                <br><br>
+	                <a href="logout" >로그아웃</a>
+	            </div>
+                 <% } %>
+             </article><!--login 끝-->
             <nav id="sub_menu"><!--서브메뉴 시작-->
                 <ul>
                     <li><a href="board_list">+ 자유게시판</a></li>
