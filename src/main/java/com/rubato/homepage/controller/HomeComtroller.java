@@ -240,8 +240,29 @@ public class HomeComtroller {
 		}
 		
 		@RequestMapping (value = "search_list")
-		public String search_list() {
+		public String search_list(HttpServletRequest request, Model model) {
 			
+		
+			String searchOption = request.getParameter("searchOption"); 
+			// title , content, writer  3개중 한개의 값을 저장
+			String searchKey = request.getParameter("searchKey"); 
+			//제목/내용/글쓴이 에 포함된 검색 키워드
+			
+			IDao dao = sqlSession.getMapper(IDao.class);
+			
+			ArrayList<RFBoardDto> boardDtos =null; // if문을 위한 선언해주기
+			
+			if(searchOption.equals("title")) {
+				boardDtos = dao.rfbSearchTitleList(searchKey);
+			} else if (searchOption.equals("content")){
+				boardDtos = dao.rfbSearchContentList(searchKey);
+			} else if (searchOption.equals("writer")){
+				boardDtos = dao.rfbSearchWriterList(searchKey);
+			} 
+			
+			
+			model.addAttribute("boardList",boardDtos);
+			model.addAttribute("boardCount",boardDtos.size());//검색결과 게시물의 개수
 			
 			return "board_list";
 		}
