@@ -125,7 +125,7 @@
                         <th>글쓴이</th>
                         <th>일시</th>
                         <th>조회수</th>
-                    </tr>
+			        </tr>
 				<c:forEach items="${boardList}" var="boardDto">
                     <tr>
                         <td class="col1">${boardDto.rfbnum }</td>
@@ -135,7 +135,13 @@
                             <!-- ?rfbnum=${boardDto.rfbnum } 게시글 링크걸때 추가해줘야함 !! -->
                             <c:if test="${boardDto.rfbreplycount !=0 }">
                              &nbsp;&nbsp;<strong>[${boardDto.rfbreplycount }]</strong>
-                            </c:if>   
+                            </c:if>  
+                            <c:if test="${boardDto.filecount != 0}">
+                            	<a href="file_down?rfbnum=${boardDto.rfbnum }">
+                            	&nbsp;<img  width="15" src="${pageContext.request.contextPath}/resources/image/file.png">
+                            	</a>
+                            </c:if>
+ 
                         </td>
                         <td class="col3">${boardDto.rfbname }</td>
                         <td class="col4">${boardDto.rfbdate }</td>

@@ -104,6 +104,25 @@
                 <p id="view_content">
                      ${rfbView.rfbcontent  }<br>
                 </p>
+          
+
+                <!-- 사진영역 -->
+                <p id="file_info">
+	        	※ 첨부파일 : 
+	        	<a href="${pageContext.request.contextPath}/resources/uploadfiles/${fileDto.filename}" download>
+	        	${fileDto.fileoriname }
+	        	</a>
+		        </p>       
+		        <c:if test="${fileDto.fileextension =='jpg' or fileDto.fileextension =='png' or fileDto.fileextension =='bmp' or fileDto.fileextension =='gif'}">
+		        	<br>
+		        	<img width="300" src="${pageContext.request.contextPath}/resources/uploadfiles/${fileDto.filename}">
+		        	<br>
+		        </c:if>
+		        <br>
+			        
+                <!-- //사진영역 -->
+                
+                
                <!-- 해당글의 댓글 리스트 출력 -->
                 <table border="1" cellspacing="0" cellpadding="0" width="750">
                 	<c:forEach items="${replylist}" var="replyDto">
@@ -123,9 +142,28 @@
                 </table>
                 <!-- //해당글의 댓글 리스트 출력 -->
                 
+                
+                
                 <!-- 댓글 입력란 -->
                 <form action="replyOk">
                 <input type="hidden" name="rfbnum" value="${rfbView.rfbnum  }"><!-- -넘겨주고 싶은 값 있을때 사용 -->
+	                
+	           <!-- 사진영역 -->
+		                <p id="file_info">
+			        	※ 첨부파일 : 
+			        	<a href="${pageContext.request.contextPath}/resources/uploadfiles/${fileDto.filename}">
+			        	${fileDto.fileoriname }
+			        	</a>
+				        </p>       
+				        <c:if test="${fileDto.fileextension =='jpg' or fileDto.fileextension =='png' or fileDto.fileextension =='bmp' or fileDto.fileextension =='gif'}">
+				        	<br>
+				        	<img width="300" src="${pageContext.request.contextPath}/resources/uploadfiles/${fileDto.filename}">
+				        	<br>
+				        </c:if>
+				        <br>
+					        
+		                <!-- //사진영역 -->
+                
 	                <div id="comment_box">
 	                    <img id="title_comment" src="${pageContext.request.contextPath}/resources/image/title_comment.gif">
 	                    <textarea name="rrcontent"></textarea>

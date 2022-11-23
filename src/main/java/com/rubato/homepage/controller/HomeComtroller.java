@@ -1,5 +1,6 @@
 package com.rubato.homepage.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,13 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rubato.homepage.dao.IDao;
+import com.rubato.homepage.dto.FileDto;
 import com.rubato.homepage.dto.RFBoardDto;
 import com.rubato.homepage.dto.RReplyDto;
 
@@ -41,11 +47,10 @@ public class HomeComtroller {
 		
 		int boardSize =boardDtos.size(); //전체 글 개수
 		
-		if(boardSize >= 4) {
-			boardDtos = boardDtos.subList(0 ,4);
-		}else{
-			boardDtos = boardDtos.subList(0 , boardSize+1);
-		} //전체글의 개수가 4개보다 작을때 발생하는 인덱스 에러 방지
+		if(boardSize > 4) {
+			boardDtos = boardDtos.subList(0 , 4);
+		}
+		 //전체글의 개수가 4개보다 작을때 발생하는 인덱스 에러 방지
 		
 
 		
@@ -74,11 +79,13 @@ public class HomeComtroller {
 		
 		int boardCount = dao.rfboardAllCount();
 		
+		
 		model.addAttribute("boardList",boardDtos);
 		model.addAttribute("boardCount",boardCount);
 		
 		
 		return "board_list";
+		
 	}
 	
 	@RequestMapping(value = "board_write")
@@ -111,8 +118,12 @@ public class HomeComtroller {
 		
 		RFBoardDto rfboardDto = dao.rfboardView(rfbnum);
 		ArrayList<RReplyDto> replyDtos= dao.rrlist(rfbnum);
+		
+		FileDto fileDto =dao.getFileInfo(rfbnum);
+		
 		model.addAttribute("rfbView" , rfboardDto);
 		model.addAttribute("replylist" ,replyDtos); // 해당글에 달린 댓글 리스트
+		model.addAttribute("fileDto" , fileDto);// 해당글에 첨부된 파일의 모든 정보 Dto
 		
 		return "board_view";
 		
@@ -170,21 +181,54 @@ public class HomeComtroller {
 	}
 	
 	@RequestMapping(value = "writeOk")
-	public String writeOk(HttpServletRequest request, HttpSession session) {
+	public String writeOk(HttpServletRequest request, HttpSession session, @RequestPart MultipartFile files) throws IllegalStateException, IOException {
 		
 		String boardName = request.getParameter("rfbname");
 		String boardTitle = request.getParameter("rfbtitle");
 		String boardContent = request.getParameter("rfbcontent");
+		
 		
 		String sessionId = (String) session.getAttribute("memberId");
 		//글쓴이의 아이디는 현재 로그인된 유저의 아이디이므로 세션에서 가져와서 전달 
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		
-		dao.rfbWrite(boardName, boardTitle, boardContent, sessionId);
-		
+		if(files.isEmpty()) { //파일의 첨부여부 확인
+			dao.rfbWrite(boardName, boardTitle, boardContent, sessionId , 0);
+		} else {
+			dao.rfbWrite(boardName, boardTitle, boardContent, sessionId , 1);
+			 ArrayList<RFBoardDto> latestBoard = dao.boardLatestInfo(sessionId);
+			 RFBoardDto dto = latestBoard.get(0); //방금쓴글 다음 가장 최근글 가져오기
+			int rfbnum = dto.getRfbnum();
+			 
+			 
+			//파일첨부 
+			String fileoriname = files.getOriginalFilename(); //첨부된 파일의 원래 이름
+			String fileextension = FilenameUtils.getExtension(fileoriname).toLowerCase();  //toLowerCase 소문자 바꿔주는 메소드
+			//아까 불러온 라이브러리중 확장자 추출후 소문자로 강제 변경
+			File destinationFile; // import java.io로 하세요
+			String destinationFileName; //실제 서버에 저장된 파일의 변경된 이름이 저장될 변수 선언
+			String fileurl = "C:/springBootWork/rubatoPJ_221117/src/main/resources/static/uploadfiles/" ;
+			//첨부된 파일이 저장될 서버의 실제 폴더 경로
+			
+			do {
+			destinationFileName =  RandomStringUtils.randomAlphanumeric(32) + "." + fileextension;//랜덤파일 만들어주는것 숫자는 파일이름길이
+			//알파벳 대소문자와 숫자를 포함한 랜덤 32자 문자열 생성 후 .을 구분자로 원본파일의 확장자를 연결 -> 실제 서버에 저장될 파일의 이름
+			destinationFile = new File(fileurl+destinationFileName);
+			} while (destinationFile.exists()); //혹시 같은이름의 파일이름이 존재하는지 확인
+			
+			
+			destinationFile.getParentFile().mkdir();
+			files.transferTo(destinationFile); // 에러나면 add throws 처음꺼 처리해줌
+			//업로드된 파일이 지정한 폴더로 이동완료!
+			
+			dao.fileInfoInsert(rfbnum, fileoriname, destinationFileName, fileextension, fileurl);
+		}
+	
 		return "redirect:board_list";
 	}
+	
+
 	
 	@RequestMapping (value = "delete")
 	public String delete(HttpServletRequest request) {
@@ -302,4 +346,31 @@ public class HomeComtroller {
 			
 			return "board_list";
 		}
+		
+		@RequestMapping(value = "file_down")
+		public String file_down(HttpServletRequest request, Model model, HttpServletResponse response) {
+
+			String rfbnum = request.getParameter("rfbnum");//파일이 첨부된 원글 번호
+
+			IDao dao = sqlSession.getMapper(IDao.class);
+
+			FileDto fileDto = dao.getFileInfo(rfbnum);
+
+			String filename = fileDto.getFilename();
+
+			PrintWriter out;
+			try {
+				response.setContentType("text/html;charset=utf-8");
+				out = response.getWriter();
+				out.println("<script>window.location.href='/resources/uploadfiles/" + filename + "'</script>");
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return "redirect:board_list";
+		}
+
+		
 }
