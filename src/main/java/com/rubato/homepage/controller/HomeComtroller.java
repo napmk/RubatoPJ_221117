@@ -3,6 +3,7 @@ package com.rubato.homepage.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,8 +25,43 @@ public class HomeComtroller {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@RequestMapping (value = "/")
+	public String home() {
+		
+		return "redirect:index";
+	}
+	
+	
 	@RequestMapping (value = "index")
-	public String index() {
+	public String index(Model model) {
+			
+		IDao dao = sqlSession.getMapper(IDao.class);
+		
+		List<RFBoardDto> boardDtos = dao.rfbList(); //전체 글 리스트 불러오기	
+		
+		int boardSize =boardDtos.size(); //전체 글 개수
+		
+		if(boardSize >= 4) {
+			boardDtos = boardDtos.subList(0 ,4);
+		}else{
+			boardDtos = boardDtos.subList(0 , boardSize+1);
+		} //전체글의 개수가 4개보다 작을때 발생하는 인덱스 에러 방지
+		
+
+		
+//		boardDtos.get(0); //가장 최근 글 첫번째
+//		boardDtos.get(1); //가장 최근 글 두번째
+//		boardDtos.get(2); //가장 최근 글 세번째
+//		boardDtos.get(3); //가장 최근 글 네번째
+		
+		
+//		
+//		model.addAttribute("freeboard01", boardDtos.get(0));
+//		model.addAttribute("freeboard02", boardDtos.get(1));
+//		model.addAttribute("freeboard03", boardDtos.get(2));
+//		model.addAttribute("freeboard04", boardDtos.get(3));
+		
+		model.addAttribute("latestDtos", boardDtos);
 		
 		return "index";
 	}

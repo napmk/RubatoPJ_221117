@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,32 +137,116 @@
                     <article id="freeBoard"><!--자유게시판-->
                          <div class="latest_title">
                             <img class="latest_img" src="${pageContext.request.contextPath}/resources/image/latest2.gif">
-                            <img class="more" src="${pageContext.request.contextPath}/resources/image/more.gif">
+                            <a href="board_list"><img class="more" src="${pageContext.request.contextPath}/resources/image/more.gif"></a>
                             <div class="clear"></div>
                         </div>
                         <div class="latest_content">
                             <img class="image" src="${pageContext.request.contextPath}/resources/image/book_pen.gif">
                             <ul class="list">
-                                <li>
-                                    <div class="subject">까스통님의 선물인 보드카..</div>
-                                    <div class="date">2022-09-30</div>
+                              <c:forEach items="${latestDtos}" var="freeboard">
+                
+					                <li>
+					                <a href="board_view?rfbnum=${freeboard.rfbnum }">	
+					                  <div class="subject">
+					                  <c:choose>
+					                  	<c:when test="${fn:length(freeboard.rfbtitle) >= 15}">
+					                  		<c:out value="${fn:substring(freeboard.rfbtitle,0,14) }"></c:out>...              
+					                  	</c:when>
+					                  	<c:otherwise>
+					                  		<c:out value="${freeboard.rfbtitle }"></c:out>                  	
+					                  	</c:otherwise>
+					                  </c:choose>
+					                  </div>
+					                 </a>
+					                  <div class="date">
+					                  	<c:out value="${fn:substring(freeboard.rfbdate,0,10) }"></c:out>                  	
+					                  </div>
+					                  <div class="clear"></div>
+					                </li>
+					                
+					                </c:forEach>
+					                
+                               <!-- <li>
+					                   <a href="board_view?rfbnum=${freeboard01.rfbnum}">
+					                  <div class="subject">
+					                  <c:choose>
+					                     <c:when test="${fn:length(freeboard01.rfbtitle) >= 15}">
+					                        <c:out value="${fn:substring(freeboard01.rfbtitle,0,14) }"></c:out>...
+					                     </c:when>
+					                     <c:otherwise>
+					                        <c:out value="${freeboard01.rfbtitle}"></c:out>
+					     
+					                     </c:otherwise>
+					                  </c:choose>
+					                  </div>
+					                  </a>
+					                  <div class="date">
+					                  <c:out value="${fn:substring(freeboard01.rfbdate,0,10) }"></c:out>
+					                 </div>
+					                  <div class="clear"></div>
+					            </li>
+                               <li>
+                               		<a href="board_view?rfbnum=${freeboard02.rfbnum}">
+                                    <div class="subject">
+                                    <c:choose>
+                                     	<c:when test="${fn:length(freeboard02.rfbtitle) >= 15} ">
+                                     		<c:out value="${fn:substring(freeboard02.rfbtitle,0,14) }"></c:out>...
+                                   		</c:when>
+                                    	
+                                    	<c:otherwise>
+                                    		<c:out value="${freeboard02.rfbtitle}"></c:out>
+                                    	</c:otherwise>
+                                    </c:choose>
+                                    </div>
+                                    </a>
+                                    <div class="date">
+                                    	<c:out value="${fn:substring(freeboard02.rfbdate,0,10) }"></c:out>
+                                    
+                                    </div>
                                     <div class="clear"></div>
                                  </li>
-                                <li>
-                                    <div class="subject">까스통님의 선물인 보드카..</div>
-                                    <div class="date">2022-09-30</div>
+                                 <li>
+                                 <a href="board_view?rfbnum=${freeboard03.rfbnum}">
+                                    <div class="subject">
+                                    <c:choose>
+                                     	<c:when test="${fn:length(freeboard03.rfbtitle) >= 15} ">
+                                     		<c:out value="${fn:substring(freeboard03.rfbtitle,0,14) }"></c:out>...
+                                   		
+                                    	</c:when>
+                                    	
+                                    	<c:otherwise>
+                                    		<c:out value="${freeboard03.rfbtitle}"></c:out>
+                                    	</c:otherwise>
+                                    </c:choose>
+                                    </div>
+                                    </a>
+                                    <div class="date">
+                                    	<c:out value="${fn:substring(freeboard03.rfbdate,0,10) }"></c:out>
+                                    
+                                    </div>
                                     <div class="clear"></div>
                                  </li>
-                                <li>
-                                    <div class="subject">까스통님의 선물인 보드카..</div>
-                                    <div class="date">2022-09-30</div>
+                                 <li>
+                                 <a href="board_view?rfbnum=${freeboard04.rfbnum}">
+                                    <div class="subject">
+                                    <c:choose>
+                                     	<c:when test="${fn:length(freeboard04.rfbtitle) >= 15} ">
+                                     		<c:out value="${fn:substring(freeboard04.rfbtitle,0,14) }"></c:out>...
+                                   		
+                                    	</c:when>
+                                    	
+                                    	<c:otherwise>
+                                    		<c:out value="${freeboard04.rfbtitle}"></c:out>
+                                    	</c:otherwise>
+                                    </c:choose>
+                                    </div>
+                                    </a>
+                                    <div class="date">
+                                    	<c:out value="${fn:substring(freeboard04.rfbdate,0,10) }"></c:out>
+                                    
+                                    </div>
                                     <div class="clear"></div>
-                                 </li>
-                                <li>
-                                    <div class="subject">까스통님의 선물인 보드카..</div>
-                                    <div class="date">2022-09-30</div>
-                                    <div class="clear"></div>
-                                 </li>
+                                 </li>-->
                             </ul>
                         </div>
                     </article><!--자유게시판 끝-->
